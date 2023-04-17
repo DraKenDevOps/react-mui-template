@@ -1,6 +1,7 @@
 import drawer from "./features/drawer";
 import auth from "./features/auth";
 import { configureStore } from "@reduxjs/toolkit";
+import { applicationApi } from "./services/applications";
 import { userApi } from "./services/userApi";
 
 export const store = configureStore({
@@ -8,6 +9,7 @@ export const store = configureStore({
         auth,
         drawer,
         [userApi.reducerPath]: userApi.reducer,
+        [applicationApi.reducerPath]: applicationApi.reducer,
 
     },
     middleware: (getDefaultMiddleware) =>
@@ -15,7 +17,7 @@ export const store = configureStore({
             serializableCheck: false,
         }).concat([
             userApi.middleware,
-
+            applicationApi.middleware,
         ]),
 });
 

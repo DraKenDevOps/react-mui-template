@@ -6,14 +6,14 @@ const RouteAdmin = [
     {
         name: "Dashboard",
         path: "/dashboard",
-        component: lazy(() => import("../pages/dashboard/home")),
+        component: lazy(() => import("../pages/home")),
         icon: faDashboard,
         exact: false,
     },
     {
-        name: "Address",
-        path: "/dashboard/address",
-        component: lazy(() => import("../pages/dashboard/project")),
+        name: "Applications",
+        path: "/dashboard/application",
+        component: lazy(() => import("../pages/applications")),
         icon: faBook,
         exact: false,
     },

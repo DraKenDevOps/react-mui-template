@@ -2,7 +2,7 @@ import React, { Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Spinner from "./components/Spinner";
-import DashboardLayout from "./layouts/dashboard";
+import DashboardLayout from "./layouts/default";
 import PublicLayout from "./layouts/public";
 import AdminMiddleware from "./middlewares/AdminMiddleware";
 // import StaffMiddleware from "./middlewares/StaffMiddleware";
@@ -11,6 +11,7 @@ import RoutePublic from "./routes/public";
 // import RouteStaff from "./routes/staff";
 import { storeLogin } from "./stores/features/auth";
 import { useMeMutation } from "./stores/services/userApi";
+import { LocalKeys } from "./utilities/localKeys";
 
 interface Props {}
 
@@ -26,9 +27,7 @@ const App: React.FC<Props> = () => {
     };
 
     useEffect(() => {
-        let token = window.localStorage.getItem(
-            import.meta.env.VITE_APP_LOCAL_TOKEN
-        );
+        let token = window.localStorage.getItem(LocalKeys.TOKEN_KEY);
         if (token) {
             handleGetMe();
         }

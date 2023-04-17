@@ -1,14 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { LocalKeys } from "../../utilities/localKeys";
+import env from "../../utilities/environment";
 
 export const userApi = createApi({
     reducerPath: "userApi",
     tagTypes: ["userApi"],
 
     baseQuery: fetchBaseQuery({
-        baseUrl: import.meta.env.VITE_APP_API_PATH,
+        baseUrl: env.BASE_API_URL,
         prepareHeaders: (headers) => {
-            const token = localStorage.getItem(import.meta.env.VITE_APP_LOCAL_TOKEN as string as string);
-            if (token) headers.set(import.meta.env.VITE_APP_HEADER, "Bearer " + token);
+            const token = localStorage.getItem(LocalKeys.TOKEN_KEY);
+            if (token) headers.set(LocalKeys.HEADER_KEY, "Bearer " + token);
             return headers;
         },
     }),

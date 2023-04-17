@@ -40,7 +40,7 @@ export const auth = createSlice({
 
             if (payload.token) {
                 localStorage.setItem(
-                    import.meta.env.VITE_APP_LOCAL_TOKEN,
+                    LocalKeys.TOKEN_KEY,
                     payload.token
                 );
             }
@@ -51,7 +51,7 @@ export const auth = createSlice({
             state.role = null;
             state.user_id = null;
             state.isLogin = false;
-            localStorage.removeItem(import.meta.env.VITE_APP_LOCAL_TOKEN);
+            localStorage.removeItem(LocalKeys.TOKEN_KEY);
         },
     },
 });
