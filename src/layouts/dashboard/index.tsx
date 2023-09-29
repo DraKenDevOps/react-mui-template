@@ -1,11 +1,5 @@
 import { useLayoutEffect } from "react";
-import {
-    styled,
-    Theme,
-    CSSObject,
-    createTheme,
-    ThemeProvider,
-} from "@mui/material/styles";
+import { styled, Theme, CSSObject, createTheme, ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
@@ -17,10 +11,10 @@ import { Menu, ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Outlet } from "react-router-dom";
 import MenuBar from "./components/MenuBar";
 import { useDispatch, useSelector } from "react-redux";
-import { setDrawerOpen } from "../../stores/features/drawer";
+import drawer, { setDrawerOpen } from "../../stores/features/drawer";
 import { RootState } from "../../stores";
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 const openedMixin = (theme: Theme): CSSObject => ({
     width: drawerWidth,
@@ -31,27 +25,6 @@ const openedMixin = (theme: Theme): CSSObject => ({
     overflowX: "hidden",
 });
 
-const closedMixin = (theme: Theme): CSSObject => ({
-    transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: "hidden",
-    width: `calc(${theme.spacing(7)} + 1px)`,
-    [theme.breakpoints.up("sm")]: {
-        width: `calc(${theme.spacing(8)} + 1px)`,
-    },
-});
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-}));
-
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
 }
@@ -59,7 +32,8 @@ interface AppBarProps extends MuiAppBarProps {
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== "open",
 })<AppBarProps>(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
+    // height: "60px",
+    // zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -74,6 +48,18 @@ const AppBar = styled(MuiAppBar, {
     }),
 }));
 
+const closedMixin = (theme: Theme): CSSObject => ({
+    transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: "hidden",
+    width: `calc(${theme.spacing(7)} + 1px)`,
+    [theme.breakpoints.up("sm")]: {
+        width: `calc(${theme.spacing(8)} + 1px)`,
+    },
+});
+
 const Drawer = styled(MuiDrawer, {
     shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -81,6 +67,7 @@ const Drawer = styled(MuiDrawer, {
     flexShrink: 0,
     whiteSpace: "nowrap",
     boxSizing: "border-box",
+    boxShadow: "0 2px 10px rgba(0,0,0,.25),0 5px 5px rgba(0,0,0,.22)",
     ...(open && {
         ...openedMixin(theme),
         "& .MuiDrawer-paper": openedMixin(theme),
@@ -91,6 +78,13 @@ const Drawer = styled(MuiDrawer, {
     }),
 }));
 
+const DrawerHeader = styled("div")(({ theme }) => ({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    ...theme.mixins.toolbar,
+}));
+
 const theme = createTheme({
     palette: {
         primary: {
@@ -98,6 +92,7 @@ const theme = createTheme({
         },
         secondary: {
             main: "#666666",
+            light: "#f9f9f9",
         },
         warning: {
             main: "#FFC500",
@@ -107,6 +102,9 @@ const theme = createTheme({
         },
         success: {
             main: "#0AB163",
+        },
+        error: {
+            main: "#FF3A1E",
         },
     },
 });
@@ -124,7 +122,6 @@ export default function MiniDrawer() {
     };
 
     useLayoutEffect(() => {
-        // Clean up the event listener on unmount
         if (window.innerWidth <= 778) {
             handleDrawerClose();
         } else {
@@ -135,36 +132,39 @@ export default function MiniDrawer() {
     return (
         <ThemeProvider theme={theme}>
             <Box sx={{ display: "flex" }}>
-                <CssBaseline />
-                <AppBar position="fixed" open={drawer.open}>
-                    <Toolbar>
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={handleDrawerOpen}
-                            edge="start"
-                            sx={{
-                                marginRight: 5,
-                                ...(drawer.open && { display: "none" }),
-                            }}
-                        >
-                            <Menu />
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
-                <Drawer variant="permanent" open={drawer.open}>
-                    <DrawerHeader>
-                        <IconButton onClick={handleDrawerClose}>
-                            {theme.direction === "rtl" ? (
-                                <ChevronRight />
-                            ) : (
-                                <ChevronLeft />
-                            )}
-                        </IconButton>
-                    </DrawerHeader>
+                {/* <CssBaseline /> */}
+                <Drawer
+                    variant="permanent"
+                    open={drawer.open}
+                    //  onMouseEnter={handleDrawerOpen}
+                    //  onMouseLeave={handleDrawerClose}
+                >
+                    <DrawerHeader sx={{ backgroundColor: theme.palette.secondary.light }}>555</DrawerHeader>
                     <Divider />
                     <MenuBar />
                 </Drawer>
+                <AppBar position="fixed" open={drawer.open} color="default" elevation={0}>
+                    <Toolbar>
+                        {drawer.open ? (
+                            <IconButton color="inherit" aria-label="close drawer" onClick={handleDrawerClose}>
+                                <Menu />
+                            </IconButton>
+                        ) : (
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                sx={{
+                                    marginRight: 5,
+                                    marginLeft: drawer.open ? 0 : 6,
+                                }}
+                            >
+                                <Menu />
+                            </IconButton>
+                        )}
+                    </Toolbar>
+                </AppBar>
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <DrawerHeader />
                     <Outlet />

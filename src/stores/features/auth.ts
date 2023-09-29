@@ -17,15 +17,15 @@ type ResponseUser = {
 };
 
 const initialState: UserState = {
-    name: 'kob',
-    role: "Admin",
-    user_id: 1,
-    isLogin: true,
+    // name: "kob",
+    // role: "Admin",
+    // user_id: 1,
+    // isLogin: true,
 
-    // name: null,
-    // role: null,
-    // user_id: null,
-    // isLogin: false,
+    name: null,
+    role: null,
+    user_id: null,
+    isLogin: false,
 };
 
 export const auth = createSlice({
@@ -39,10 +39,7 @@ export const auth = createSlice({
             state.isLogin = true;
 
             if (payload.token) {
-                localStorage.setItem(
-                    import.meta.env.VITE_APP_LOCAL_TOKEN,
-                    payload.token
-                );
+                localStorage.setItem(import.meta.env.VITE_APP_LOCAL_TOKEN, payload.token);
             }
         },
 
